@@ -15,7 +15,9 @@ df <- read_sheet(ss = "1YAbstZeZfTu6bItHQXVr02WrD1JmNNvn4dd-m88omLY",
                  sheet = "wave_1")
 df <- df[complete.cases(df), ]
 
-df <- df %>% group_by("accession_id")
+df <- df %>% 
+  group_by(accession_id) %>%
+  filter(n() == 12)
 
 df$anther_over_pistil <- df$anther_length / df$pistil_length
 
@@ -110,3 +112,4 @@ ggsave(filename = file.path(getwd(), "plots", "anther_pistil_ratio.png"),
        height = 9,
        dpi = 400,
        units = 'in')
+
