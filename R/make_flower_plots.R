@@ -257,6 +257,71 @@ ggsave(filename = file.path(getwd(), "plots", "only_chosen_accessions.png"),
        units = 'in')
 
 
+# Getting the image names -------------------------------------------------
+# None of the images are named after their accession, just the wells. The 
+# required information to link well to accession can be found in this sheet:
+wells_to_accessions <- read_sheet("1yQ5yAKiL6BzwZ-wH-Q44RoUEwMZztTYafzdvVylq6fo")
+
+# Selecting only rows for the chosen accessions
+wells_to_accessions <- wells_to_accessions[wells_to_accessions$accession %in% unlist(unique(chosen_accessions$accession_id)), ]
+
+# Only keeping the columns we need
+wells_to_accessions <- wells_to_accessions[ , c("date", "run", "well", "temp_target", "accession")]
+
+# Also I need to pull in which wells are a good density
+wells_with_good_density <- read_sheet("10_lG9N0wGvgOmxDGuX5PXILB7QwC7m6CuYXzi78Qe3Q")
+
+# Combining
+file_names <- left_join(wells_to_accessions, wells_with_good_density, by = c("date", "run", "well"))
+
+# Only keeping the good ones
+file_names <- file_names[file_names$count == "g", ]
+file_names <- file_names[ , 1:5]
+
+# Selecting 8 random rows per accession/temp (seed makes it reproducible)
+set.seed(13)
+file_names <- file_names %>%
+  group_by(accession, temp_target) %>%
+  slice_sample(n = 8)
+
+# We're using the 81st frame (starts at 0 so it's 80) from each image 
+# (~2 hours). We'll measure tube lengths from the control temp and bursting 
+# from both temps. 
+file_names$string <- paste0(file_names$date,
+                            "_run",
+                            file_names$run,
+                            "_",
+                            file_names$temp_target,
+                            "C/well_",
+                            file_names$well,
+                            "/",
+                            file_names$date,
+                            "_run",
+                            file_names$run,
+                            "_",
+                            file_names$temp_target,
+                            "C_",
+                            file_names$well,
+                            "_t080.tif")
+
+# This will be the key
+file_names <- file_names[ , c("string", "accession")]
+
+# Writing out the file names for the bash script to copy the images to a 
+# single directory
+write.table(file_names$string,
+            file = file.path(getwd(), "data", "image_paths.txt"),
+            row.names = F,
+            col.names = F,
+            quote = F)
+
+# The bash command (from /xdisk/rpalaniv/cedar/image_processing/processed_tifs)
+# is:
+# cat ~/scratch/image_paths.txt | xargs -I % cp % ~/scratch/xander_pics
+
+
+
+
 
 
 
