@@ -123,7 +123,10 @@ ggsave(filename = file.path(getwd(), "plots", "anther_pistil_ratio.png"),
 # Selecting accessions for Xander to measure ------------------------------
 # First we need to narrow down accessions to those with completed image 
 # sequences. We'll get that information from the app Google sheet. 
-app_info <- read_sheet(ss = "15oanRivQrhWl0EFmv4zxZqsIB1pLp9InEP43pjqkfGs")
+# THIS DOESN'T WORK ANYMORE, because the app Google sheet only includes 
+# current accessions. Regardless, I already chose the accessions, so I'll 
+# skip this for now and go straight to the file names?
+app_info <- read_sheet(ss = "1G-WXm_ShCSyQMVCWT9oRDs1uavaJirZGVVR3shfd5zA")
 
 # Pulling out the accessions that have completed image sequences at both 
 # temperatures.
@@ -170,15 +173,20 @@ ggsave(filename = file.path(getwd(), "plots", "pistil_lengths_complete_accession
        units = 'in')
 
 # Choosing the top and bottom 4 accessions by pistil length
-mean_pistils <- df %>%
-  filter(accession_passing == "Images complete") %>%
-  # Removing CW1008 because it's pimpinellifolium, just to keep the species consisten
-  filter(accession_id != "CW1008") %>%
-  summarize(mean_pistils = mean(pistil_length)) %>%
-  arrange(mean_pistils)
-  
-shortest_pistils <- mean_pistils$accession_id[1:4]
-longest_pistils <- mean_pistils$accession_id[(nrow(mean_pistils) - 3):nrow(mean_pistils)]
+# Note: we selected these at a certain point in time, before additional measurements, 
+# so I'll freeze it here.
+# mean_pistils <- df %>%
+#   filter(accession_passing == "Images complete") %>%
+#   # Removing CW1008 because it's pimpinellifolium, just to keep the species consisten
+#   filter(accession_id != "CW1008") %>%
+#   summarize(mean_pistils = mean(pistil_length)) %>%
+#   arrange(mean_pistils)
+# 
+# shortest_pistils <- mean_pistils$accession_id[1:4]
+# longest_pistils <- mean_pistils$accession_id[(nrow(mean_pistils) - 3):nrow(mean_pistils)]
+
+shortest_pistils <- c("CW0081", "CW0054", "CW0042", "CW0041")
+longest_pistils <- c("CW0060", "CW0056", "CW0065", "CW0064")
 
 pistil_factor_list <- c(shortest_pistils, longest_pistils)
 
@@ -225,11 +233,13 @@ chosen_accessions$short_or_long <- NA
 chosen_accessions$short_or_long[chosen_accessions$accession_id %in% shortest_pistils] <- "Short"
 chosen_accessions$short_or_long[chosen_accessions$accession_id %in% longest_pistils] <- "Long"
 
+plot_colors <- c("#009292", "#d1214d")
+
 ggplot(data = chosen_accessions, aes(x = reorder(accession_id, pistil_length, median), 
                       y = pistil_length,
                       fill = short_or_long)) +
   geom_boxplot(size = 1, color = "black") +
-  scale_fill_manual(values = c("red", "blue")) +
+  scale_fill_manual(values = plot_colors) +
   labs(title = "Chosen accessions",
        y = "Pistil length (mm)") +
   scale_y_continuous(breaks = seq(5, 12, 1),
@@ -304,8 +314,24 @@ file_names$string <- paste0(file_names$date,
                             file_names$well,
                             "_t080.tif")
 
-# This will be the key
-file_names <- file_names[ , c("string", "accession")]
+file_names$short_filename <- paste0(file_names$date,
+                                   "_run",
+                                   file_names$run,
+                                   "_",
+                                   file_names$temp_target,
+                                   "C_",
+                                   file_names$well,
+                                   "_t080")
+
+
+# Saving the key
+write.table(file_names[ , c("short_filename", "accession")],
+            file = file.path(getwd(), "data", "image_key.txt"),
+            row.names = F,
+            col.names = F,
+            quote = F)
+
+# file_names <- file_names[ , c("string", "accession")]
 
 # Writing out the file names for the bash script to copy the images to a 
 # single directory
