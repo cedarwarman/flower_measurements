@@ -69,6 +69,38 @@ ggsave(filename = file.path(getwd(), "plots", "tube_lengths.png"),
        dpi = 400,
        units = 'in')
 
+ggplot(data = tube_lengths, aes(x = reorder(accession_id, tube_length, median), 
+                                y = tube_length,
+                                fill = short_or_long)) + 
+  geom_boxplot(size = 1, color = "black") +
+  # geom_violin(size = 1, color = "black") +
+  scale_fill_manual(values = plot_colors) +
+  labs(title = "Tube lengths",
+       y = "Length (pixels)") +
+  # scale_y_continuous(breaks = seq(5, 12, 1),
+  #                    labels = seq(5, 12, 1),
+  #                    limits = c(5, 12)) +
+  theme_bw() +
+  theme(axis.title = element_text(size = 26, face = 'bold'),
+        axis.text = element_text(size = 22, face = 'bold', color = 'black'),
+        axis.text.x = element_text(size = 20, angle = 45, hjust = 1, face = 'bold', color = 'black'),
+        plot.title = element_text(size = 28, face = 'bold', margin = margin(0, 0, 10, 0)),
+        axis.title.x = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(size = 1, color = 'black'),
+        axis.ticks = element_line(size = 1, color = 'black'),
+        axis.ticks.length = unit(8, 'pt'),
+        plot.margin = margin(0.5, 0.5, 0.5, 0.5, 'cm'),
+        panel.grid = element_blank(),
+        legend.position = 'none')
+
+ggsave(filename = file.path(getwd(), "plots", "tube_lengths_ordered.png"),
+       device = 'png',
+       width = 7,
+       height = 9,
+       dpi = 400,
+       units = 'in')
+
 
 # Statistics --------------------------------------------------------------
 # Checking normality
