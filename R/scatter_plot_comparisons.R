@@ -41,8 +41,8 @@ tube_length_v_percent_burst <- ggplot(plot_df, aes(x = mean_tube_length,
   geom_point(size = 4) +
   geom_text_repel(size = 5, fontface = 'bold', box.padding = 0.5, min.segment.length = Inf) +
   labs(title = "Tube length versus percent burst",
-       x = "Mean tube length (µm)",
-       y = "Mean % burst") +
+       x = "Mean tube length at 26ºC (µm)",
+       y = "Mean % burst at 34 ºC") +
     scale_y_continuous(breaks = seq(0, 1, 0.2),
                        labels = seq(0, 100, 20),
                        limits = c(0, 1)) +
@@ -53,7 +53,8 @@ tube_length_v_percent_burst <- ggplot(plot_df, aes(x = mean_tube_length,
     theme(axis.title = element_text(size = 26, face = 'bold'),
           axis.text = element_text(size = 22, face = 'bold', color = 'black'),
           axis.text.x = element_text(size = 20, face = 'bold', color = 'black'),
-          plot.title = element_text(size = 28, face = 'bold', margin = margin(0, 0, 10, 0)),
+          axis.title.x = element_text(margin = margin(10, 0, 0, 0)),
+          plot.title = element_text(size = 28, face = 'bold', margin = margin(0, 0, 20, 0)),
           panel.border = element_blank(),
           axis.line = element_line(size = 1, color = 'black'),
           axis.ticks = element_line(size = 1, color = 'black'),
@@ -83,7 +84,7 @@ tube_length_v_pistil_length <- ggplot(plot_df, aes(x = mean_pistil_length,
   geom_text_repel(size = 5, fontface = 'bold', box.padding = 0.5, min.segment.length = Inf) +
   labs(title = "Pistil length versus tube length",
        x = "Mean pistil length (mm)",
-       y = "Mean tube length (µm)") +
+       y = "Mean tube length at 26ºC (µm)") +
   scale_x_continuous(breaks = seq(6, 10, 1),
                      labels = seq(6, 10, 1),
                      limits = c(6, 10.3)) +
@@ -94,7 +95,9 @@ tube_length_v_pistil_length <- ggplot(plot_df, aes(x = mean_pistil_length,
   theme(axis.title = element_text(size = 26, face = 'bold'),
         axis.text = element_text(size = 22, face = 'bold', color = 'black'),
         axis.text.x = element_text(size = 20, face = 'bold', color = 'black'),
-        plot.title = element_text(size = 28, face = 'bold', margin = margin(0, 0, 10, 0)),
+        axis.title.x = element_text(margin = margin(10, 0, 0, 0)),
+        axis.title.y = element_text(margin = margin(0, 10, 0, 0)),
+        plot.title = element_text(size = 28, face = 'bold', margin = margin(0, 0, 20, 0)),
         panel.border = element_blank(),
         axis.line = element_line(size = 1, color = 'black'),
         axis.ticks = element_line(size = 1, color = 'black'),
