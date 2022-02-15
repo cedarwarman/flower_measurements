@@ -42,7 +42,7 @@ tube_length_v_percent_burst <- ggplot(plot_df, aes(x = mean_tube_length,
   geom_text_repel(size = 5, fontface = 'bold', box.padding = 0.5, min.segment.length = Inf) +
   labs(title = "Tube length versus percent burst",
        x = "Mean tube length at 26ºC (µm)",
-       y = "Mean % burst at 34 ºC") +
+       y = "Mean % burst at 34ºC") +
     scale_y_continuous(breaks = seq(0, 1, 0.2),
                        labels = seq(0, 100, 20),
                        limits = c(0, 1)) +
