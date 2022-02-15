@@ -50,7 +50,7 @@ ggplot(data = bursting, aes(x = accession_id,
   # geom_boxplot(size = 1, color = "black") +
   geom_boxplot(size = 1) +
   scale_fill_manual(values = c("#78e6ff", "#ff7878")) +
-  labs(title = "Bursting at 26ºC and 34ºC",
+  labs(title = "Bursting at 26 ºC and 34 ºC",
        y = "% burst") +
   scale_y_continuous(breaks = seq(0, 1, 0.2),
                      labels = seq(0, 100, 20),
