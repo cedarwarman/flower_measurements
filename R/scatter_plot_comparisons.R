@@ -46,9 +46,9 @@ tube_length_v_percent_burst <- ggplot(plot_df, aes(x = mean_tube_length,
     scale_y_continuous(breaks = seq(0, 1, 0.2),
                        labels = seq(0, 100, 20),
                        limits = c(0, 1)) +
-    scale_x_continuous(breaks = seq(275, 425, 25),
-                       labels = seq(275, 425, 25),
-                       limits = c(275, 425)) +
+    scale_x_continuous(breaks = seq(275, 400, 25),
+                       labels = seq(275, 400, 25),
+                       limits = c(275, 410)) +
     theme_bw() +
     theme(axis.title = element_text(size = 26, face = 'bold'),
           axis.text = element_text(size = 22, face = 'bold', color = 'black'),
@@ -84,12 +84,12 @@ tube_length_v_pistil_length <- ggplot(plot_df, aes(x = mean_pistil_length,
   labs(title = "Pistil length versus tube length",
        x = "Mean pistil length (mm)",
        y = "Mean tube length (µm)") +
-  # scale_y_continuous(breaks = seq(0, 1, 0.2),
-  #                    labels = seq(0, 100, 20),
-  #                    limits = c(0, 1)) +
-  # scale_x_continuous(breaks = seq(275, 425, 25),
-  #                    labels = seq(275, 425, 25),
-  #                    limits = c(275, 425)) +
+  scale_x_continuous(breaks = seq(6, 10, 1),
+                     labels = seq(6, 10, 1),
+                     limits = c(6, 10.3)) +
+  scale_y_continuous(breaks = seq(275, 400, 25),
+                     labels = seq(275, 400, 25),
+                     limits = c(275, 405)) +
   theme_bw() +
   theme(axis.title = element_text(size = 26, face = 'bold'),
         axis.text = element_text(size = 22, face = 'bold', color = 'black'),
