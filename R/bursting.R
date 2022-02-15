@@ -5,6 +5,7 @@ library(googlesheets4)
 library(dplyr)
 library(ggplot2)
 library(dunn.test)
+library(rstatix)
 
 # Importing and adding metadata -------------------------------------------
 # The bursting measurements:
@@ -147,6 +148,19 @@ ggsave(filename = file.path(getwd(), "plots", "bursting_34_ordered.png"),
 
 
 # Stats -------------------------------------------------------------------
+# Pairwise comparisons of bursting between 26 and 34 C (the rstatix package
+# provides a pipe-friendly version of base R's pairwise.t.test).
+pairwise_bursting_stats <- bursting %>%
+  group_by(accession_id) %>%
+  pairwise_t_test(percent_burst ~ temperature, 
+                  paired = TRUE, 
+                  p.adjust.method = "bonferroni") %>%
+  select(accession_id, p, p.adj)
+
+
+
+
+
 # Checking normality
 bursting %>% ggplot(aes(x = percent_burst)) +
   geom_histogram(binwidth = 0.05) +
