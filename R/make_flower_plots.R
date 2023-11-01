@@ -5,8 +5,7 @@
 library(tidyverse)
 library(googlesheets4)
 
-# Sheet is public
-#gs4_deauth()
+set.seed(12)
 
 # Adding my Google service account credentials
 gs4_auth(path = "~/.credentials/google_sheets_api/service_account.json")
@@ -23,9 +22,27 @@ df <- df[complete.cases(df), ]
 
 df <- df %>% 
   group_by(accession_id) %>%
-  filter(n() == 12)
+  filter(n() >= 12)
 
 df$anther_over_pistil <- df$anther_length / df$pistil_length
+
+# Choosing random Heinz wave
+heinz_waves <- c(1, 6, 7, 8, 9)
+random_wave <- sample(heinz_waves, 1)
+
+df <- df %>%
+  filter(
+    accession_id == "CW0000" & wave_num == 6 |
+    accession_id != "CW0000"
+  )
+
+df %>%
+  write.table(
+    file = file.path(getwd(), "data", "flower_measurements.tsv"),
+    sep = '\t',
+    quote = FALSE,
+    row.names = FALSE
+  )
 
 
 # Plotting ----------------------------------------------------------------
